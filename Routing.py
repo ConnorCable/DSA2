@@ -8,13 +8,14 @@ class Routing:
         self.distance_table = distance_table
         self.address_table = address_table
         self.hash_table = hash_table
-
+    # O(n) runtime for iterating through a list ( the address table)
     # gets address id from address string
     def getAddress(self, addy):
         for item in self.address_table:
             if addy in item[2]:
                 return int(item[0])
     # gets the distance between two address id's
+    # O(1) runtime, as dictionary / list lookups are both O(1)
     def getDistance(self, beginning, ending):
         distance = self.distance_table[beginning][ending]
         if distance == "":
@@ -24,13 +25,16 @@ class Routing:
     # This algorithm is O(n*m) where n is the number of packages in the truck and m is the amount remaining once one is selected
     def deliverPackages(self, truck):
         to_deliver = []
+        # Load the packages from the truck into the algorithm
 
         for package_id in truck.packages:
             package = self.hash_table.search(package_id)
+            # Set the packages departure time to when the truck leaves the hub
             package.departure_time = truck.departureTime
             to_deliver.append(package)
 
         while len(to_deliver) != 0:
+            # initialize distance between node variable, smallest ( next chosen) distance, and next package
             distance_between = 0
             next_distance = 9999
             next_package = None
@@ -62,7 +66,7 @@ class Routing:
         selection.reportStatus(time)
         return selection
 
-    # This algorithm is O(41 * 1) as it only needs to iterate 41 times, but would be O(n)
+    # This algorithm is O(40 * 1) as it only needs to iterate 40 times, but would be O(n)
     # if the hash table continued to expand
     # hash lookup is O(1)
     def getAllPackages(self, time):

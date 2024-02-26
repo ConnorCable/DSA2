@@ -58,6 +58,7 @@ truck_2 = Truck("4001 South 700 East", 18, 0, datetime.timedelta(hours=10, minut
 truck_3 = Truck("4001 South 700 East", 18, 0, datetime.timedelta(hours=9, minutes=5),
                 [2, 4, 6, 7, 8, 3, 10, 11, 25, 28, 33, 32])
 
+# load the relevant tables into a Routing object
 router = Routing(distance_hash, addresses, package_hash)
 
 router.deliverPackages(truck_1)

@@ -16,7 +16,7 @@ class Package:
         return f"ID: {self.id}, address: {self.address}, city: {self.city}, state: {self.state}, zipcode: {self.zipcode}, deadline: {self.deadline}, weight: {self.weight}, departed: {self.departure_time}, delivered: {self.delivery_time} {self.deliveryStatus}  "
     
 
-
+    # This is O(1) for a simple comparison of datetime objects
     def reportStatus(self,time):
         if time >= self.delivery_time:
             self.deliveryStatus = " | \033[92m" + "Delivered" + "\033[0m"
