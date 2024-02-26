@@ -9,6 +9,8 @@ class HashTable:
             self.table.append([])
 
     # Insert or update an item into the hash table
+    # O(1) to insert
+    # O(n) to update, based on length of bucket
     def insert(self, key, item): 
         
         bucket = hash(key) % len(self.table)
@@ -16,7 +18,7 @@ class HashTable:
  
         # update key if it is already in the bucket
         for kv in bucket_list:
-          #print (key_value)
+
           if kv[0] == key:
             kv[1] = item
             return True
@@ -25,7 +27,10 @@ class HashTable:
         key_value = [key, item]
         bucket_list.append(key_value)
         return True
-    
+
+
+    # O(1) to search a bucket of length 1
+    # O(n) to search a bucket of length > 1
     def search(self, key):
         # get the bucket list where this key would be.
         bucket = hash(key) % len(self.table)
@@ -38,14 +43,3 @@ class HashTable:
           if kv[0] == key:
             return kv[1] # value
         return None
-    
-def remove(self, key):
-    # get the bucket list where this item will be removed from.
-    bucket = hash(key) % len(self.table)
-    bucket_list = self.table[bucket]
-
-    # remove the item from the bucket list if it is present.
-    for kv in bucket_list:
-    #print (key_value)
-        if kv[0] == key:
-            bucket_list.remove([kv[0],kv[1]])

@@ -1,0 +1,74 @@
+import datetime
+
+# This class handles all routing needs, including getting distances, address id's, delivering packages
+# and providing information on packages as requested by the user interface
+class Routing:
+
+    def __init__(self, distance_table, address_table, hash_table):
+        self.distance_table = distance_table
+        self.address_table = address_table
+        self.hash_table = hash_table
+
+    # gets address id from address string
+    def getAddress(self, addy):
+        for item in self.address_table:
+            if addy in item[2]:
+                return int(item[0])
+    # gets the distance between two address id's
+    def getDistance(self, beginning, ending):
+        distance = self.distance_table[beginning][ending]
+        if distance == "":
+            distance = self.distance_table[ending][beginning]
+        return float(distance)
+
+    # This algorithm is O(n*m) where n is the number of packages in the truck and m is the amount remaining once one is selected
+    def deliverPackages(self, truck):
+        to_deliver = []
+
+        for package_id in truck.packages:
+            package = self.hash_table.search(package_id)
+            package.departure_time = truck.departureTime
+            to_deliver.append(package)
+
+        while len(to_deliver) != 0:
+            distance_between = 0
+            next_distance = 9999
+            next_package = None
+            for package in to_deliver:
+                # get the truck's address number
+                current_address = self.getAddress(truck.location)
+                # get the package's address number
+                package_address = self.getAddress(package.address)
+                # get the distance between the truck and the package in question
+                distance_between = self.getDistance(current_address, package_address)
+                # if the package is not due EOD, make it next
+                if "EOD" not in package.deadline:
+                    next_package = package
+                    break
+                if distance_between <= next_distance:
+                    next_package = package
+            # update trucks mileage, address, and current time
+
+            truck.location = next_package.address
+            truck.miles += distance_between
+            truck.currentTime += datetime.timedelta(hours=distance_between / truck.speed)
+            # update the packages delivery time
+            next_package.delivery_time = truck.currentTime
+            to_deliver.remove(next_package)
+
+    # This algorithm is O(1) as the hash table lookup is O(1)
+    def getSinglePackage(self, package_id, time):
+        selection = self.hash_table.search(package_id)
+        selection.reportStatus(time)
+        return selection
+
+    # This algorithm is O(41 * 1) as it only needs to iterate 41 times, but would be O(n)
+    # if the hash table continued to expand
+    # hash lookup is O(1)
+    def getAllPackages(self, time):
+        collection = []
+        for i in range(1, 41):
+            package = self.hash_table.search(i)
+            package.reportStatus(time)
+            collection.append(package)
+        return collection
