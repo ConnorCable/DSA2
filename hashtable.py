@@ -1,6 +1,10 @@
 
 # Source: W-1_ChainingHashTable_zyBooks_Key-Value.py
 # Source: C950 Webinar-1 - Let's Go Hashing
+# This is a self-resizing hash table that built upon lists
+# to insert, it hashes the key and uses the modulo of the length in order to find the index of insertion
+# if a collision occurs, it will append a new bin to the bin_list
+# to update, if a key is found it will update the item at that key
 class HashTable:
     def __init__(self, initial_capacity=30):
         # set initial capacity of the table ( the buckets)
@@ -11,35 +15,35 @@ class HashTable:
     # Insert or update an item into the hash table
     # O(1) to insert
     # O(n) to update, based on length of bucket
-    def insert(self, key, item): 
+    def insert(self, key, item):
         
-        bucket = hash(key) % len(self.table)
-        bucket_list = self.table[bucket]
+        bin = hash(key) % len(self.table)
+        bin_list = self.table[bin]
  
-        # update key if it is already in the bucket
-        for kv in bucket_list:
+        # update key if it is already in the bin
+        for key_value in bin_list:
 
-          if kv[0] == key:
-            kv[1] = item
+          if key_value[0] == key:
+            key_value[1] = item
             return True
         
-        # if not, insert the item to the end of the bucket list.
+        # if not, insert the item to the end of the bin list.
         key_value = [key, item]
-        bucket_list.append(key_value)
+        bin_list.append(key_value)
         return True
 
 
     # O(1) to search a bucket of length 1
     # O(n) to search a bucket of length > 1
     def search(self, key):
-        # get the bucket list where this key would be.
-        bucket = hash(key) % len(self.table)
-        bucket_list = self.table[bucket]
+        # get the bin list where this key would be.
+        bin = hash(key) % len(self.table)
+        bin_list = self.table[bin]
         #print(bucket_list)
  
-        # search for the key in the bucket list
-        for kv in bucket_list:
+        # search for the key in the bin list
+        for key_value in bin_list:
           #print (key_value)
-          if kv[0] == key:
-            return kv[1] # value
+          if key_value[0] == key:
+            return key_value[1] # value
         return None

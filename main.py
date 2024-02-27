@@ -29,15 +29,15 @@ package_hash = HashTable()
 
 # O(n) runtime complexity, based on the number of packages needing to be inserted into the hash
 def packages_to_hash(table, package_list):
-    for package in package_list:
-        package_id = int(package[0])
-        address = package[1]
-        city = package[2]
-        state = package[3]
-        package_zip = package[4]
-        deadline = package[5]
-        weight = package[6]
-        notes = package[7]
+    for p in package_list:
+        package_id = int(p[0])
+        address = p[1]
+        city = p[2]
+        state = p[3]
+        package_zip = p[4]
+        deadline = p[5]
+        weight = p[6]
+        notes = p[7]
 
         item = Package(package_id, address, city, state, package_zip, deadline, weight, notes)
 
@@ -51,18 +51,21 @@ packages_to_hash(package_hash, packages)
 truck_1 = Truck("4001 South 700 East", 18, 0, datetime.timedelta(hours=8),
                 [20,3,
                  29, 15, 40, 31, 14, 34, 16, 37, 13, 1, 30, ])
-# Truck with packages that have specific requirements ( including package 9, which has its address fixed at exactly 10:20)
+# Truck with packages that have specific requirements ( including package 9, which has its address fixed at exactly
+# 10:20)
 truck_2 = Truck("4001 South 700 East", 18, 0, datetime.timedelta(hours=10, minutes=20),
-                [9, 5, 12, 17, 21, 19, 18, 22, 23, 24, 26, 27, 35, 36, 38, 39])
+                [9, 5, 6, 17, 21, 19, 18, 22, 23, 24, 26, 27, 35, 36, 38, 39])
 # Truck with late packages arriving at 9:05
-truck_3 = Truck("4001 South 700 East", 18, 0, datetime.timedelta(hours=9, minutes=5),
-                [2, 4, 6, 7, 8, 3, 10, 11, 25, 28, 33, 32])
+truck_3 = Truck("4001 South 700 East", 18, 0, truck_1.currentTime,
+                [2, 4, 12, 7, 8, 3, 10, 11, 25, 28, 33, 32])
 
 # load the relevant tables into a Routing object
 router = Routing(distance_hash, addresses, package_hash)
 
 router.deliverPackages(truck_1)
 router.deliverPackages(truck_2)
+# route the first truck back to the hub so that they can drive the third truck
+truck_1.miles += router.getDistance(0,router.getAddress(truck_1.location))
 router.deliverPackages(truck_3)
 
 # User interface, takes 3 different options for selections
