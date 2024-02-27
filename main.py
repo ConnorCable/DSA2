@@ -66,6 +66,7 @@ router.deliverPackages(truck_1)
 router.deliverPackages(truck_2)
 # route the first truck back to the hub so that they can drive the third truck
 truck_1.miles += router.getDistance(0,router.getAddress(truck_1.location))
+truck_1.location = "4001 South 700 East"
 router.deliverPackages(truck_3)
 
 # User interface, takes 3 different options for selections
