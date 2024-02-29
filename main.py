@@ -1,4 +1,4 @@
-# WGU Data Structures and Algorithms 2
+# WGU Data Structures and Algorithms 2 C950
 # Connor Cable
 # Student ID: 011447975
 
@@ -33,6 +33,7 @@ package_hash = HashTable()
 
 
 # O(n) runtime complexity, based on the number of packages needing to be inserted into the hash
+
 def packages_to_hash(table, package_list):
     for p in package_list:
         package_id = int(p[0])
@@ -48,7 +49,7 @@ def packages_to_hash(table, package_list):
 
         table.insert(package_id, item)
 
-
+# load the package list into the hash table
 packages_to_hash(package_hash, packages)
 
 # location, speed,  miles, depatureTime,  packages
@@ -80,12 +81,14 @@ while True:
     if selection not in ["1", "2", "3"]:
         print("Invalid selection")
         continue
+    # print the truck miles
     if selection == "3":
         print("truck 1 miles: " + str(truck_1.miles))
         print("truck 2 miles: " + str(truck_2.miles))
         print("truck 3 miles: " + str(truck_3.miles))
         print("combined miles : " + str(truck_1.miles + truck_2.miles + truck_3.miles))
         continue
+    # get the time of interest for the packages
     time = input("Please enter a time you'd like to see the package(s) at. Format: HH:MM ")
     try:
         (hours, minutes) = time.split(":")
