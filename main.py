@@ -1,3 +1,8 @@
+# WGU Data Structures and Algorithms 2
+# Connor Cable
+# Student ID: 011447975
+
+
 import csv
 import datetime
 from hashtable import HashTable
@@ -49,27 +54,24 @@ packages_to_hash(package_hash, packages)
 # location, speed,  miles, depatureTime,  packages
 # instantiate the trucks, with their packages loaded
 truck_1 = Truck("4001 South 700 East", 18, 0, datetime.timedelta(hours=8),
-                [20, 3,
-                 29, 15, 40, 31, 14, 34, 16, 37, 13, 1, 30, ])
-# Truck with packages that have specific requirements ( including package 9, which has its address fixed at exactly
-# 10:20)
-truck_2 = Truck("4001 South 700 East", 18, 0, datetime.timedelta(hours=10, minutes=20),
-                [9, 5, 6, 17, 21, 19, 18, 22, 23, 24, 26, 27, 35, 36, 38, 39])
-# Truck with late packages arriving at 9:05
-
+                [16, 34, 37, 40, 19, 13, 1, 20, 14, 15, 10, 11])
+truck_2 = Truck("4001 South 700 East", 18, 0, datetime.timedelta(hours=8),
+                [6, 18, 25, 27, 33, 35, 36, 38, 39, 30, 31, 29, ])
 
 # load the relevant tables into a Routing object
 router = Routing(distance_hash, addresses, package_hash)
 
+# deliver packages for truck 1 and 2
 router.deliverPackages(truck_1)
 router.deliverPackages(truck_2)
 # route the first truck back to the hub so that they can drive the third truck
 truck_1.miles += router.getDistance(0, router.getAddress(truck_1.location))
 truck_1.location = "4001 South 700 East"
-truck_1.currentTime += datetime.timedelta(hours=router.getDistance(0, router.getAddress(truck_1.location) / 18)
-                                          )
+truck_1.currentTime += datetime.timedelta(
+    hours=router.getDistance(0, router.getAddress(truck_1.location)) / truck_1.speed)
+# put all the EOD package on truck 3 + some others , truck 3 starts when truck 1 reaches the hub
 truck_3 = Truck("4001 South 700 East", 18, 0, truck_1.currentTime,
-                [2, 4, 12, 7, 8, 3, 10, 11, 25, 28, 33, 32])
+                [3, 2, 4, 5, 7, 8, 9, 12, 17, 21, 22, 23, 24, 26, 28, 32, ])
 router.deliverPackages(truck_3)
 
 # User interface, takes 3 different options for selections
@@ -91,9 +93,11 @@ while True:
         continue
     time = datetime.timedelta(hours=int(hours), minutes=int(minutes))
     match selection:
+        # get one package O(1)
         case "1":
             id = int(input("Please enter a package ID: "))
-            print(str(router.getSinglePackage(id, time)) + "at " + str(time) + " |")
+            print(str(router.getSinglePackage(id, time)))
+        # get all packages O(n)
         case "2":
             for package in router.getAllPackages(time):
-                print(str(package) + "at " + str(time) + " |")
+                print(str(package))
