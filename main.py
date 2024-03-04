@@ -99,8 +99,8 @@ while True:
         # get one package O(1)
         case "1":
             id = int(input("Please enter a package ID: "))
-            print(str(router.getSinglePackage(id, time)))
+            print(router.getSinglePackage(id, time).returnString())
         # get all packages O(n)
         case "2":
             for package in router.getAllPackages(time):
-                print(str(package))
+                package.returnString()

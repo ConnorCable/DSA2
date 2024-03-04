@@ -17,6 +17,15 @@ class Package:
     def __str__(self) -> str:
         return f"ID: {self.id}, address: {self.address}, city: {self.city}, state: {self.state}, zipcode: {self.zipcode}, deadline: {self.deadline}, weight: {self.weight}, departed: {self.departure_time}, delivered: {self.delivery_time} {self.deliveryStatus}{self.deadStatus}"
 
+    def returnString(self):
+        if "At WGUPS Hub" in self.deliveryStatus:
+            print( f"ID: {self.id}, address: {self.address}, city: {self.city}, state: {self.state}, zipcode: {self.zipcode}, deadline: {self.deadline}, weight: {self.weight}, {self.deliveryStatus}{self.deadStatus}")
+        if "Delivered" in self.deliveryStatus:
+            print( f"ID: {self.id}, address: {self.address}, city: {self.city}, state: {self.state}, zipcode: {self.zipcode}, deadline: {self.deadline}, weight: {self.weight}, departed: {self.departure_time}, delivered: {self.delivery_time} {self.deliveryStatus}{self.deadStatus}")
+        if "En Route" in self.deliveryStatus:
+            print( f"ID: {self.id}, address: {self.address}, city: {self.city}, state: {self.state}, zipcode: {self.zipcode}, deadline: {self.deadline}, weight: {self.weight}, departed: {self.departure_time},{self.deliveryStatus}{self.deadStatus}")
+
+
     # This is O(1) for a simple comparison of datetime objects
     def reportStatus(self, time):
         if time >= self.delivery_time:
